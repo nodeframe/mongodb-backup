@@ -19,6 +19,10 @@ Moreover, if you link `tutum/mongodb-backup` to a mongodb container(e.g. `tutum/
     docker run -d -p 27017:27017 -p 28017:28017 -e MONGODB_PASS="mypass" --name mongodb tutum/mongodb
     docker run -d --link mongodb:mongodb -v host.folder:/backup tutum/mongodb-backup
 
+### Secondary Sotrage:
+If you have a use case such as a secondary storage, i.e. Convoy etc.
+You can set the flag `SECONDARY_STORAGE_PATH`. The backup script will simply moved the backup script file into the designate folder.
+
 ## Parameters
 
     MONGODB_HOST    the host/ip of your mongodb database
@@ -30,6 +34,7 @@ Moreover, if you link `tutum/mongodb-backup` to a mongodb container(e.g. `tutum/
     CRON_TIME       the interval of cron job to run mongodump. `0 0 * * *` by default, which is every day at 00:00
     MAX_BACKUPS     the number of backups to keep. When reaching the limit, the old backup will be discarded. No limit, by default
     INIT_BACKUP     if set, create a backup when the container launched
+    SECONDARY_STORAGE_PATH if set, the backup will copy the backup file to the this path location after finishing the backup
 
 ## Restore from a backup
 

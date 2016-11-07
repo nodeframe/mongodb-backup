@@ -24,6 +24,10 @@ BACKUP_NAME=\$(date +\%Y.\%m.\%d.\%H\%M\%S)
 echo "=> Backup started"
 if ${BACKUP_CMD} ;then
     echo "   Backup succeeded"
+    if [ -n "${SECONDARY_STORAGE_PATH}" ]; then
+        cp -r /backup/${BACKUP_NAME} ${SECONDARY_STORAGE_PATH}/${BACKUP_NAME}
+        echo "   Completed copying file to ${SECONDARY_STORAGE_PATH}/${BACKUP_NAME}"
+    fi
 else
     echo "   Backup failed"
     rm -rf /backup/\${BACKUP_NAME}
