@@ -1,24 +1,22 @@
-# mongodb-backup
+# mongodb-backup [![Docker Repository on Quay](https://quay.io/repository/nodeframe/mongo-db-backup/status "Docker Repository on Quay")](https://quay.io/repository/nodeframe/mongo-db-backup)
 
 This image runs mongodump to backup data using cronjob to folder `/backup`
 
 ## Usage:
 
     docker run -d \
-        --env MONGODB_HOST=mongodb.host \
+        --env MONGODB_HOST=db \
         --env MONGODB_PORT=27017 \
         --env MONGODB_USER=admin \
         --env MONGODB_PASS=password \
+        --link mongo_db_container:db
         --volume host.folder:/backup
         quay.io/nodeframe/mongo-db-backup
 
-Moreover, if you link `tutum/mongodb-backup` to a mongodb container(e.g. `tutum/mongodb`) with an alias named mongodb, this image will try to auto load the `host`, `port`, `user`, `pass` if possible.
-
-    docker run -d -p 27017:27017 -p 28017:28017 -e MONGODB_PASS="mypass" --name mongodb tutum/mongodb
-    docker run -d --link mongodb:mongodb -v host.folder:/backup quay.io/nodeframe/mongo-db-backup
+Moreover, if you link `quay.io/nodeframe/mongodb-backup` to a mongodb container(e.g. `mongodb:3.2`) with an alias named mongodb, this image will try to auto load the `host`, `port`, `user`, `pass` if possible.
 
 ### Secondary Sotrage:
-If you have a use case such as a secondary storage, i.e. Convoy etc.
+If you have a use case such as a secondary storage driver, i.e. [Convoy](http://rancher.com/introducing-convoy-a-docker-volume-driver-for-backup-and-recovery-of-persistent-data/) etc.
 You can set the flag `SECONDARY_STORAGE_PATH`. The backup script will simply moved the backup script file into the designate folder.
 
 ## Parameters
@@ -38,8 +36,8 @@ You can set the flag `SECONDARY_STORAGE_PATH`. The backup script will simply mov
 
 See the list of backups, you can run:
 
-    docker exec tutum-backup ls /backup
+    docker exec mongodb-backup ls /backup
 
 To restore database from a certain backup, simply run:
 
-    docker exec tutum-backup /restore.sh /backup/2015.08.06.171901
+    docker exec mongodb-backup /restore.sh /backup/2015.08.06.171901
